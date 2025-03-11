@@ -5,10 +5,13 @@ import MainLayout from "@layouts/MainLayout.astro";
 import TypedBlogPost from "@components/TypedBlogPost.astro";
 
 
-const blogPost = await getCollection('blog');
+
+
+const blogPost = await getCollection('blog',  (post) => post.data.isDraft === false);
 
 // const matches = import.meta.glob('./posts-old/*.{md,mdx}, {eager:true}');
 // const posts = Object.values(matches);
+
 ---
 
 <MainLayout title="Mi primer blog en Astro">
@@ -19,6 +22,10 @@ const blogPost = await getCollection('blog');
 		<h1 class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white">
 			{siteConfig.title}
 		</h1>
+
+		<a class="mb-4" href="/blog/1">Blog paginado</a>
+		<a class="mb-4" href="/authors">Autores</a>
+
 		<div class="grid grid-cols-1 gap-8 mt-8 md:mt-16 md:grid-cols-2">
 			{blogPost.map((post) => <TypedBlogPost post={post} />)}
 		</div>
@@ -26,4 +33,12 @@ const blogPost = await getCollection('blog');
 </section>
 </MainLayout>
 	
+<style>
+	@reference "tailwindcss";
 
+	a {
+		@apply text-blue-500 hover:underline;
+	}
+
+
+</style>

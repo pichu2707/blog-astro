@@ -3,7 +3,8 @@ import BlogPost from "@components/BlogPost.astro";
 import { siteConfig } from "../config/site-config";
 import MainLayout from "@layouts/MainLayout.astro";
 
-const posts = await Astro.glob('./posts/*.{md,mdx}');
+
+const posts = import.meta.glob('./posts/*.{md,mdx}');
 console.log(posts);
 ---
 

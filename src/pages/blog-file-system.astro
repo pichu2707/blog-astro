@@ -3,9 +3,23 @@ import BlogPost from "@components/BlogPost.astro";
 import { siteConfig } from "../config/site-config";
 import MainLayout from "@layouts/MainLayout.astro";
 
+//Definiendo la interfaz de un post
+interface Post {
+	path: string;
+	
+}
 
 const posts = import.meta.glob('./posts/*.{md,mdx}');
-console.log(posts);
+const postEntries = Object.entries(posts);
+const postPromises = postEntries.map(([path, resolver]) => resolver().then((mod) => {
+	if (typeof mod === 'object' && mod !== null && 'default' in mod) {
+		return { path, ...(mod as {default: object}). default };
+	}
+	throw new Error(`El módulo en ${path} no tiene una exportación por defecto`);
+})
+);
+
+const resolvedPosts: Post[] = await Promise.all(postPromises);
 ---
 
 <MainLayout title="Mi primer blog en Astro">
@@ -19,7 +33,7 @@ console.log(posts);
 
         <div class="grid grid-cols-1 gap-8 mt-8 md:mt-16 md:grid-cols-2">
 			{
-				posts.map((post) => <BlogPost {...post} />)
+				resolvedPosts.map((post: any) => <BlogPost {...post} />)
 			}
 
             

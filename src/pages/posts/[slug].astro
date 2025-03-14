@@ -5,7 +5,7 @@ import { Image } from "astro:assets";
 import { getEntry } from "astro:content";
 import { Formatter } from "@utils/formatter";
 import type { GetStaticPaths } from "astro";
-
+import "../../styles/global.css";
 
 export const getStaticPaths = (async () => {
 
@@ -34,10 +34,10 @@ const author = (await getEntry('author', post.data.author.id)).data;
 ---
 <BlogLayout title={frontmatter.title}>
 <!-- Avatar -->
-<div class="text-md text-gray-400 mb-400 mb-0 flex flex-row mt-2">
 
-    <h1 class="text-xs text-gray-500 mb-0">{frontmatter.title}</h1>
+<h1 class="text-xs text-gray-500 mb-0">{frontmatter.title}</h1>
 
+<div class="text-md text-gray-400 mb-0 flex flex-row mt-2">
     <Image
     class="rounded-full"
     src= {author.avatar}
@@ -60,7 +60,7 @@ const author = (await getEntry('author', post.data.author.id)).data;
     alt={frontmatter.title}
     width={600}
     height={220}
-    class="object-cover w-full has-[250px] my-5 rounded"
+    class="object-cover w-full h-[250px] my-5 rounded-md"
     transition:name={`${post.slug}-image`} />
 
     <!-- Imagen -->
